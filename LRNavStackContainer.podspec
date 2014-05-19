@@ -8,4 +8,5 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/timshadel/LRNavStackContainer.git", :tag => s.version.to_s }
   s.source_files = 'LRNavStackContainer.[mh]'
   s.public_header_files = 'LRNavStackContainer.h'
+  s.requires_arc = true
 end
