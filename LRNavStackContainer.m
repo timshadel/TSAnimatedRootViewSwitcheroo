@@ -81,13 +81,13 @@ __strong static LRNavStackContainer *sharedContainer;
 
 - (BOOL)shouldSwitchToViewController:(UIViewController *)viewController {
     BOOL shouldSwitch = YES;
-  if (!viewController) {
-    shouldSwitch = NO;
-  } else if (![self isViewLoaded]) {
-    shouldSwitch = NO;
-  } else if (viewController == self.navStack && [self.navStack isViewLoaded]) {
-    shouldSwitch = NO;
-  }
+    if (!viewController) {
+        shouldSwitch = NO;
+    } else if (![self isViewLoaded]) {
+        shouldSwitch = NO;
+    } else if (viewController == self.navStack && [self.navStack isViewLoaded] && self.navStack.view.superview) {
+        shouldSwitch = NO;
+    }
     return shouldSwitch;
 }
 
