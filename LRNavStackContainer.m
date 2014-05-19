@@ -25,6 +25,14 @@ __strong static LRNavStackContainer *sharedContainer;
 
 @implementation LRNavStackContainer
 
++ (instancetype)setupWithDelegate:(id<LRNavStackContainerDelegate>)delegate {
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
+        sharedContainer = [[LRNavStackContainer alloc] initWithDelegate:delegate];
+    });
+    return sharedContainer;
+}
+
 + (instancetype)setupNavStack:(UIViewController *)navStack andDelegate:(id<LRNavStackContainerDelegate>)delegate {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
@@ -33,8 +41,12 @@ __strong static LRNavStackContainer *sharedContainer;
     return sharedContainer;
 }
 
-+ (void)switchToNavStack:(UIViewController *)navStack direction:(LRNavStackAnimationDirection)direction {
++ (void)useNavStack:(UIViewController *)navStack direction:(LRNavStackAnimationDirection)direction {
     [sharedContainer switchToNavStack:navStack direction:direction];
+}
+
+- (id)initWithDelegate:(id<LRNavStackContainerDelegate>)delegate {
+    return [self initWithNavStack:nil andDelegate:delegate];
 }
 
 - (id)initWithNavStack:(UIViewController *)navStack andDelegate:(id<LRNavStackContainerDelegate>)delegate {
@@ -69,7 +81,9 @@ __strong static LRNavStackContainer *sharedContainer;
 
 - (BOOL)shouldSwitchToViewController:(UIViewController *)viewController {
     BOOL shouldSwitch = YES;
-  if (![self isViewLoaded]) {
+  if (!viewController) {
+    shouldSwitch = NO;
+  } else if (![self isViewLoaded]) {
     shouldSwitch = NO;
   } else if (viewController == self.navStack && [self.navStack isViewLoaded]) {
     shouldSwitch = NO;
@@ -79,7 +93,7 @@ __strong static LRNavStackContainer *sharedContainer;
 
 - (id<UIViewControllerAnimatedTransitioning>)animatorToViewController:(UIViewController *)viewController
                                                             direction:(LRNavStackAnimationDirection)direction {
-    if (self.navStack == viewController) {
+    if (!self.navStack || self.navStack == viewController) {
         return nil;
     }
     
