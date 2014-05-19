@@ -1,9 +1,9 @@
 LRNavStackContainer
 ===================
 
-LRNavStackContainer is a simple container controller that lets you transition between UIViewControllers.
+`LRNavStackContainer` is a simple container controller that lets you transition between `UIViewController`s.
 
-LRNavStackContainer helps you manage your app's nav stacks. It's very common to have several slices in your application. For example:
+`LRNavStackContainer` helps you manage your app's nav stacks. It's very common to have several slices in your application. For example:
 
   - Normal day-to-day app use (`UITabBarController` with `UINavigationController`s on each tab)
   - Intro (`UIPageViewController`)
@@ -11,7 +11,7 @@ LRNavStackContainer helps you manage your app's nav stacks. It's very common to 
   - Upgrading DB (plain `UIViewController`)
   - Network down (another plain `UIViewController`)
 
-LRNavStackContainer helps your app transition smoothly between these very different structures using the [iOS 7 UIViewControllerAnimatedTransitioning Protocol](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIViewControllerAnimatedTransitioning_Protocol/Reference/Reference.html#//apple_ref/doc/uid/TP40013387), including animation libraries like [VCTransitionsLibrary](https://github.com/ColinEberhardt/VCTransitionsLibrary/).
+`LRNavStackContainer` helps your app transition smoothly between these very different structures using the [iOS 7 UIViewControllerAnimatedTransitioning Protocol](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIViewControllerAnimatedTransitioning_Protocol/Reference/Reference.html#//apple_ref/doc/uid/TP40013387), including animation libraries like [VCTransitionsLibrary](https://github.com/ColinEberhardt/VCTransitionsLibrary/).
 
 ## Example
 
