@@ -1,58 +1,58 @@
 //
-//  LRNavStackContainer.m
+//  TSAnimatedRootViewSwitcheroo.m
 //
 
-#import "LRNavStackContainer.h"
+#import "TSAnimatedRootViewSwitcheroo.h"
 
-typedef void (^LRTransitionCompletionBlock)(BOOL didComplete);
+typedef void (^TSSwitcherooCompletionBlock)(BOOL didComplete);
 
-__strong static LRNavStackContainer *sharedContainer;
+__strong static TSAnimatedRootViewSwitcheroo *sharedContainer;
 
-@interface LRNavStackTransitionContext : NSObject <UIViewControllerContextTransitioning>
+@interface TSSwitcherooContext : NSObject <UIViewControllerContextTransitioning>
 
-@property (nonatomic, copy) LRTransitionCompletionBlock completionBlock;
+@property (nonatomic, copy) TSSwitcherooCompletionBlock completionBlock;
 
 - (instancetype)initWithFromViewController:(UIViewController *)fromViewController
                           toViewController:(UIViewController *)toViewController;
 
 @end
 
-@interface LRNavStackContainer ()
+@interface TSAnimatedRootViewSwitcheroo ()
 
-@property (nonatomic, strong) UIViewController *navStack;
+@property (nonatomic, strong) UIViewController *root;
 
 @end
 
-@implementation LRNavStackContainer
+@implementation TSAnimatedRootViewSwitcheroo
 
-+ (instancetype)setupWithDelegate:(id<LRNavStackContainerDelegate>)delegate {
++ (instancetype)setupWithDelegate:(id<TSAnimatedRootViewSwitcherooDelegate>)delegate {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        sharedContainer = [[LRNavStackContainer alloc] initWithDelegate:delegate];
+        sharedContainer = [[TSAnimatedRootViewSwitcheroo alloc] initWithDelegate:delegate];
     });
     return sharedContainer;
 }
 
-+ (instancetype)setupNavStack:(UIViewController *)navStack andDelegate:(id<LRNavStackContainerDelegate>)delegate {
++ (instancetype)switcherooWithRoot:(UIViewController *)root andDelegate:(id<TSAnimatedRootViewSwitcherooDelegate>)delegate {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        sharedContainer = [[LRNavStackContainer alloc] initWithNavStack:navStack andDelegate:delegate];
+        sharedContainer = [[TSAnimatedRootViewSwitcheroo alloc] initWithRoot:root andDelegate:delegate];
     });
     return sharedContainer;
 }
 
-+ (void)useNavStack:(UIViewController *)navStack direction:(LRNavStackAnimationDirection)direction {
-    [sharedContainer switchToNavStack:navStack direction:direction];
++ (void)useRoot:(UIViewController *)root direction:(TSSwitcherooAnimationDirection)direction {
+    [sharedContainer switchToRoot:root direction:direction];
 }
 
-- (id)initWithDelegate:(id<LRNavStackContainerDelegate>)delegate {
-    return [self initWithNavStack:nil andDelegate:delegate];
+- (id)initWithDelegate:(id<TSAnimatedRootViewSwitcherooDelegate>)delegate {
+    return [self initWithRoot:nil andDelegate:delegate];
 }
 
-- (id)initWithNavStack:(UIViewController *)navStack andDelegate:(id<LRNavStackContainerDelegate>)delegate {
+- (id)initWithRoot:(UIViewController *)root andDelegate:(id<TSAnimatedRootViewSwitcherooDelegate>)delegate {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        self.navStack = navStack;
+        self.root = root;
         self.delegate = delegate;
     }
     return self;
@@ -60,7 +60,7 @@ __strong static LRNavStackContainer *sharedContainer;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self _switchToNavStack:self.navStack direction:LRNavStackAnimationDirectionForward];
+    [self _switchToRoot:self.root direction:TSSwitcherooAnimationDirectionForward];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -68,13 +68,13 @@ __strong static LRNavStackContainer *sharedContainer;
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle {
-  return self.navStack;
+  return self.root;
 }
 
-- (void)switchToNavStack:(UIViewController *)navStack direction:(LRNavStackAnimationDirection)direction {
-  NSParameterAssert (navStack);
-  [self _switchToNavStack:navStack direction:(LRNavStackAnimationDirection)direction];
-  self.navStack = navStack;
+- (void)switchToRoot:(UIViewController *)root direction:(TSSwitcherooAnimationDirection)direction {
+  NSParameterAssert (root);
+  [self _switchToRoot:root direction:(TSSwitcherooAnimationDirection)direction];
+  self.root = root;
 }
 
 #pragma mark Private Methods
@@ -85,36 +85,36 @@ __strong static LRNavStackContainer *sharedContainer;
         shouldSwitch = NO;
     } else if (![self isViewLoaded]) {
         shouldSwitch = NO;
-    } else if (viewController == self.navStack && [self.navStack isViewLoaded] && self.navStack.view.superview) {
+    } else if (viewController == self.root && [self.root isViewLoaded] && self.root.view.superview) {
         shouldSwitch = NO;
     }
     return shouldSwitch;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animatorToViewController:(UIViewController *)viewController
-                                                            direction:(LRNavStackAnimationDirection)direction {
-    if (!self.navStack || self.navStack == viewController) {
+                                                            direction:(TSSwitcherooAnimationDirection)direction {
+    if (!self.root || self.root == viewController) {
         return nil;
     }
     
-    SEL animSelector = @selector(navStackContainer:animationControllerForDirection:fromViewController:toViewController:);
+    SEL animSelector = @selector(switcheroo:animationControllerForDirection:fromViewController:toViewController:);
   if ([self.delegate respondsToSelector:animSelector]) {
-    return [self.delegate navStackContainer:self
+    return [self.delegate switcheroo:self
                 animationControllerForDirection:direction
-                             fromViewController:self.navStack
+                             fromViewController:self.root
                                toViewController:viewController];
   }
 
     return nil;
 }
 
-- (void)_switchToNavStack:(UIViewController *)toViewController direction:(LRNavStackAnimationDirection)direction {
+- (void)_switchToRoot:(UIViewController *)toViewController direction:(TSSwitcherooAnimationDirection)direction {
     
   if (![self shouldSwitchToViewController:toViewController]) {
     return;
   }
 
-  UIViewController *fromViewController = (toViewController == self.navStack) ? nil : self.navStack;
+  UIViewController *fromViewController = (toViewController == self.root) ? nil : self.root;
     id<UIViewControllerAnimatedTransitioning>animator = [self animatorToViewController:toViewController
                                                                              direction:direction];
     
@@ -125,7 +125,7 @@ __strong static LRNavStackContainer *sharedContainer;
 
     [fromViewController willMoveToParentViewController:nil];
   [self addChildViewController:toViewController];
-  LRTransitionCompletionBlock completionBlock = ^(BOOL didComplete) {
+  TSSwitcherooCompletionBlock completionBlock = ^(BOOL didComplete) {
     [fromViewController.view removeFromSuperview];
     [fromViewController removeFromParentViewController];
     [toViewController didMoveToParentViewController:self];
@@ -136,7 +136,7 @@ __strong static LRNavStackContainer *sharedContainer;
   };
 
   if (animator) {
-        LRNavStackTransitionContext *transitionContext = [[LRNavStackTransitionContext alloc] initWithFromViewController:fromViewController toViewController:toViewController];
+        TSSwitcherooContext *transitionContext = [[TSSwitcherooContext alloc] initWithFromViewController:fromViewController toViewController:toViewController];
         transitionContext.completionBlock = completionBlock;
         [animator animateTransition:transitionContext];
     } else {
@@ -153,11 +153,11 @@ __strong static LRNavStackContainer *sharedContainer;
 
 #pragma mark - Private Transitionin Context
 
-@interface LRNavStackTransitionContext ()
+@interface TSSwitcherooContext ()
 @property (nonatomic, strong) NSDictionary *privateViewControllers;
 @end
 
-@implementation LRNavStackTransitionContext
+@implementation TSSwitcherooContext
 
 - (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController {
   NSAssert ([fromViewController isViewLoaded] && fromViewController.view.superview, @"The fromViewController view must reside in the container view upon initializing the transition context.");
