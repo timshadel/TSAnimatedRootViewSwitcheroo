@@ -145,6 +145,10 @@ __strong static LRNavStackContainer *sharedContainer;
     }
 }
 
+- (void)viewDidLayoutSubviews {
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
 @end
 
 #pragma mark - Private Transitionin Context
