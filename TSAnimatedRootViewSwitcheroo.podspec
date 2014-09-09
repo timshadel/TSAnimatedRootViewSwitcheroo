@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "TSAnimatedRootViewSwitcheroo"
-  s.version      = "1.0.0"
-  s.summary      = "A simple container controller for your that lets you animate transitions from one UIWindow.rootViewController to a new one."
+  s.version      = "1.0.1"
+  s.summary      = "A simple container controller to animate transitions to change UIWindow.rootViewController."
   s.homepage     = "https://github.com/timshadel/TSAnimatedRootViewSwitcheroo"
   s.license      = "MIT"
   s.author       = { 'Tim Shadel' => 'github@timshadel.com' }
