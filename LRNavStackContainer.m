@@ -64,17 +64,21 @@ __strong static LRNavStackContainer *sharedContainer;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-  return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleLightContent;
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle {
-  return self.navStack;
+    return self.root;
 }
 
-- (void)switchToNavStack:(UIViewController *)navStack direction:(LRNavStackAnimationDirection)direction {
-  NSParameterAssert (navStack);
-  [self _switchToNavStack:navStack direction:(LRNavStackAnimationDirection)direction];
-  self.navStack = navStack;
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.root;
+}
+
+- (void)switchToRoot:(UIViewController *)root direction:(TSSwitcherooAnimationDirection)direction {
+    NSParameterAssert (root);
+    [self _switchToRoot:root direction:(TSSwitcherooAnimationDirection)direction];
+    self.root = root;
 }
 
 #pragma mark Private Methods
