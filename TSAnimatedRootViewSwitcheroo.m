@@ -64,17 +64,21 @@ __strong static TSAnimatedRootViewSwitcheroo *sharedContainer;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-  return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleLightContent;
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle {
-  return self.root;
+    return self.root;
+}
+
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.root;
 }
 
 - (void)switchToRoot:(UIViewController *)root direction:(TSSwitcherooAnimationDirection)direction {
-  NSParameterAssert (root);
-  [self _switchToRoot:root direction:(TSSwitcherooAnimationDirection)direction];
-  self.root = root;
+    NSParameterAssert (root);
+    [self _switchToRoot:root direction:(TSSwitcherooAnimationDirection)direction];
+    self.root = root;
 }
 
 #pragma mark Private Methods
