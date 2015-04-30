@@ -100,7 +100,7 @@ __strong static TSAnimatedRootViewSwitcheroo *sharedContainer;
     if (!self.root || self.root == viewController) {
         return nil;
     }
-    
+
     SEL animSelector = @selector(switcheroo:animationControllerForDirection:fromViewController:toViewController:);
   if ([self.delegate respondsToSelector:animSelector]) {
     return [self.delegate switcheroo:self
@@ -113,7 +113,7 @@ __strong static TSAnimatedRootViewSwitcheroo *sharedContainer;
 }
 
 - (void)_switchToRoot:(UIViewController *)toViewController direction:(TSSwitcherooAnimationDirection)direction {
-    
+
   if (![self shouldSwitchToViewController:toViewController]) {
     return;
   }
@@ -121,19 +121,20 @@ __strong static TSAnimatedRootViewSwitcheroo *sharedContainer;
   UIViewController *fromViewController = (toViewController == self.root) ? nil : self.root;
     id<UIViewControllerAnimatedTransitioning>animator = [self animatorToViewController:toViewController
                                                                              direction:direction];
-    
+
   UIView *toView = toViewController.view;
   [toView setTranslatesAutoresizingMaskIntoConstraints:YES];
   toView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   toView.frame = self.view.bounds;
 
-    [fromViewController willMoveToParentViewController:nil];
+  [fromViewController dismissViewControllerAnimated:YES completion:nil];
+  [fromViewController willMoveToParentViewController:nil];
   [self addChildViewController:toViewController];
   TSSwitcherooCompletionBlock completionBlock = ^(BOOL didComplete) {
     [fromViewController.view removeFromSuperview];
     [fromViewController removeFromParentViewController];
     [toViewController didMoveToParentViewController:self];
-    
+
     if ([animator respondsToSelector:@selector (animationEnded:)]) {
       [animator animationEnded:didComplete];
     }
@@ -165,14 +166,14 @@ __strong static TSAnimatedRootViewSwitcheroo *sharedContainer;
 
 - (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController {
   NSAssert ([fromViewController isViewLoaded] && fromViewController.view.superview, @"The fromViewController view must reside in the container view upon initializing the transition context.");
-  
+
   if ((self = [super init])) {
     self.privateViewControllers = @{
       UITransitionContextFromViewControllerKey: fromViewController,
       UITransitionContextToViewControllerKey: toViewController,
     };
   }
-  
+
   return self;
 }
 
