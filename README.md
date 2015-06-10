@@ -62,12 +62,12 @@ Then we can easily add our `TSAnimatedRootViewSwitcheroo` to help transition fro
 
 - (void)signOut {
   // Do some stuff
-  [TSAnimatedRootViewSwitcheroo useRoot:[AppRoots loggedOutRoot] direction:TSSwitcherooAnimationDirectionReverse];
+  [TSAnimatedRootViewSwitcheroo switchToRoot:[AppRoots loggedOutRoot] direction:TSSwitcherooAnimationDirectionReverse];
 }
 
 - (void)signIn {
   // Do some stuff
-  [TSAnimatedRootViewSwitcheroo useRoot:[AppRoots appRoot] direction:TSSwitcherooAnimationDirectionForward];
+  [TSAnimatedRootViewSwitcheroo switchToRoot:[AppRoots appRoot] direction:TSSwitcherooAnimationDirectionForward];
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)switcheroo:(TSAnimatedRootViewSwitcheroo *)switcheroo
