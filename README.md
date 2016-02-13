@@ -15,7 +15,7 @@ TSAnimatedRootViewSwitcheroo
 
 ## Example
 
-First, grab it with Cocoapods:
+First, grab it with CocoaPods:
 
 ```sh
 pod 'TSAnimatedRootViewSwitcheroo', '~> 1.0.0'
