@@ -2,8 +2,7 @@
 //  TSAnimatedRootViewSwitcheroo.h
 //
 
-@import UIKit;
-@import Foundation;
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSUInteger, TSSwitcherooAnimationDirection) {
     TSSwitcherooAnimationDirectionForward,
